@@ -9,16 +9,18 @@ const PAD = {
 } as const;
 
 export function Card({
+  as: Tag = "div",
   variant = "standard",
   className,
   children,
 }: {
+  as?: "div" | "section" | "article";
   variant?: keyof typeof PAD;
   className?: string;
   children: ReactNode;
 }) {
   return (
-    <div
+    <Tag
       className={cn(
         "rounded-card border border-line shadow-[inset_0_1px_0_rgb(255_255_255/0.04)]",
         PAD[variant],
@@ -26,6 +28,6 @@ export function Card({
       )}
     >
       {children}
-    </div>
+    </Tag>
   );
 }

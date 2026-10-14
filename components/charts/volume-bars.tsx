@@ -89,7 +89,7 @@ export function VolumeBars({
         >
           <XAxis
             dataKey="week"
-            tick={{ fontSize: 12, fill: "var(--text-muted)", fontFamily: "var(--font-mono-face), ui-monospace, monospace" }}
+            tick={{ fontSize: 12, fill: "var(--text-muted)", fontFamily: "var(--font-body-face), system-ui, sans-serif" }}
             axisLine={false}
             tickLine={false}
           />
@@ -121,7 +121,7 @@ export function VolumeBars({
           />
         </ComposedChart>
       </div>
-      <p className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-[12px] text-ink">
+      <p className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-micro text-ink">
         <span>Bars, weekly km</span>
         <span>Line, 4-week average {averageText}</span>
         <span>

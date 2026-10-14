@@ -118,8 +118,8 @@ export function GoalRing({
               strokeDashoffset={offset}
               className={
                 play
-                  ? "irun-goal-fill [filter:drop-shadow(0_0_8px_rgb(214_242_92/0.35))] [[data-theme=light]_&]:filter-none"
-                  : "[filter:drop-shadow(0_0_8px_rgb(214_242_92/0.35))] [[data-theme=light]_&]:filter-none"
+                  ? "irun-goal-fill [filter:drop-shadow(0_0_var(--glow-size)_var(--glow-accent))]"
+                  : "[filter:drop-shadow(0_0_var(--glow-size)_var(--glow-accent))]"
               }
               style={{ ["--irun-ring-from" as string]: `${ARC}px`, ["--irun-ring-to" as string]: `${offset}px` }}
             />
@@ -129,11 +129,11 @@ export function GoalRing({
           </g>
         </svg>
         <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
-          <span className="num text-[25cqw] italic leading-none text-ink">{center}</span>
+          <span className="num text-[25cqw] leading-none text-ink">{center}</span>
           <span className="font-mono text-[6cqw] text-ink-muted">s/km</span>
         </div>
       </div>
-      {caption ? <p className="text-center font-mono text-[12px] text-ink-muted">{caption}</p> : null}
+      {caption ? <p className="text-center font-mono text-micro text-ink-muted">{caption}</p> : null}
     </div>
   );
 }

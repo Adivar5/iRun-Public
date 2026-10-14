@@ -46,13 +46,13 @@ A run recorded on a watch lands on Strava, then on the **Today** screen within a
 
 | Screen       | What it answers                                                                                                                                                                                                           |
 | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Today**    | Latest run (distance, pace, heart rate, route), the delta versus the last similar run, this week against a target band, the 5k goal ring.                                                                                 |
-| **Runs**     | Every run, filtered by Easy / Tempo / Long / Intervals, with a pace sparkline. **Loops** are detected automatically from your routes. Run detail has a pace and heart-rate chart you can scrub, splits, zones, elevation. |
+| **Today**    | A hero card for the latest run (distance, pace, heart rate, route) with the delta versus the last similar run, this week against a target band, and the 5k goal ring. Weekly insight cards live on Insights only.       |
+| **Runs**     | Every run, filtered by Easy / Tempo / Long / Intervals, with a pace sparkline. **Loops** are detected automatically from your routes. Run detail draws the route over an OpenStreetMap map, with a pace and heart-rate chart you can scrub, splits, zones, elevation. |
 | **Trends**   | "Am I building volume?" Weekly km, a 4-week average and a target band. Best efforts (exact and equivalent), pace-distance curve, efficiency.                                                                              |
 | **Insights** | A weekly set of cards (Progress, Risk, Coach), each with a value, a delta, one concrete action, a confidence level and its source.                                                                                        |
 | **Strength** | Gym sessions from Strava, leg-day spacing against a 24 h mark, and one calendar for runs and strength.                                                                                                                    |
 
-Goals (5k pace, 10k pace, a custom distance) and the weekly target band are set in **Settings**.
+Goals (5k pace, 10k pace, a custom distance), the weekly target band and the **Light or Dark** theme are set in **Settings**. The app opens in a light paper theme (teal accent, one peach highlight) and remembers your choice on the device.
 
 ---
 
@@ -61,7 +61,7 @@ Goals (5k pace, 10k pace, a custom distance) and the weekly target band are set 
 | Layer         | Choice                                                                                         |
 | ------------- | ---------------------------------------------------------------------------------------------- |
 | App           | Next.js 16 (App Router, `proxy.ts`), React 19, TypeScript 5                                    |
-| UI            | Tailwind CSS 4, Radix + Base UI primitives, Framer Motion, Recharts, Vaul (sheets)             |
+| UI            | Tailwind CSS 4, Geist, Radix + Base UI primitives, Framer Motion, Recharts, Vaul (sheets)      |
 | Data and auth | Supabase: Postgres with RLS, Auth (TOTP / AAL2), Vault, `pg_cron`                              |
 | Server logic  | Supabase Edge Functions on Deno (OAuth, webhook, worker, backfill, reconcile, weekly insights) |
 | Validation    | Zod                                                                                            |
@@ -209,7 +209,7 @@ Health data is sensitive, so the defaults are strict.
 
 **Web and data**
 
-- Strict headers: CSP, HSTS (2 years, preload), `nosniff`, `frame-ancestors 'none'`, strict referrer policy, and a Permissions-Policy that denies camera, microphone and geolocation.
+- Strict headers: CSP (images only from the app itself and `tile.openstreetmap.org`), HSTS (2 years, preload), `nosniff`, `frame-ancestors 'none'`, strict referrer policy, and a Permissions-Policy that denies camera, microphone and geolocation.
 - No health data in logs, error messages or analytics. There is no third-party analytics.
 - Settings has **Export all my data** and **Delete all my data**.
 
@@ -218,6 +218,7 @@ Health data is sensitive, so the defaults are strict.
 - The CSP still allows `'unsafe-inline'` for scripts and styles, because Next 16.3 has no nonce configuration and the charts and icons need inline styles.
 - Strava keeps a copy of every activity, and Strava's terms apply to the data.
 - Aggregated stats (not raw routes) are sent to Anthropic to write the weekly insights.
+- The run map loads public OpenStreetMap tiles in your browser, so OpenStreetMap sees which map tiles (the general area) you view. The route line itself is drawn locally and never sent anywhere.
 
 ---
 
@@ -225,7 +226,7 @@ Health data is sensitive, so the defaults are strict.
 
 ```
 app/          Next.js routes: (app)/today, runs, trends, insights, strength, settings; login, mfa
-components/   UI primitives, charts, screens
+components/   UI primitives, charts, skeletons, screens
 lib/          Data access, auth levels, formatting, archive parsing
 supabase/     Migrations and Edge Functions (+ _shared metrics, ingest, insights)
 scripts/      One-time setup: create-owner, subscribe-webhook

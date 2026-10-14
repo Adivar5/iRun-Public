@@ -10,7 +10,7 @@ const csp = [
   "default-src 'self'",
   scriptSrc,
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob:",
+  "img-src 'self' data: blob: https://tile.openstreetmap.org", // run-detail map tiles
   "font-src 'self'",
   `connect-src 'self' ${supabase} ${supabase.replace("https://", "wss://")}`,
   "frame-ancestors 'none'",

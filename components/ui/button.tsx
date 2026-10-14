@@ -6,7 +6,7 @@ import { press } from "./press";
 
 const VARIANT = {
   primary:
-    "bg-accent-ink text-on-accent shadow-[0_0_24px_rgb(214_242_92/0.35)] [[data-theme=light]_&]:shadow-none hover:bg-accent",
+    "bg-accent-ink text-on-accent shadow-[0_0_var(--glow-size)_var(--glow-accent)] hover:bg-accent",
   secondary: "border border-line bg-surface-2 text-ink hover:bg-surface-1",
   ghost: "bg-transparent text-ink hover:bg-surface-2",
   destructive: "border border-line bg-transparent text-alert hover:bg-surface-2",

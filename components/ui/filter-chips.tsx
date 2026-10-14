@@ -34,7 +34,7 @@ export function FilterChips<T extends string>({
             value={option.value}
             aria-label={option.count == null ? undefined : `${option.label} ${option.count}`}
             className={cn(
-              "inline-flex min-h-11 min-w-11 items-center justify-center gap-1 rounded-full border border-line px-3 text-[13px] font-medium",
+              "inline-flex min-h-11 min-w-11 items-center justify-center gap-1 rounded-full border border-line px-3 text-label font-medium",
               press,
               on ? "border-transparent bg-accent-ink text-on-accent" : "bg-surface-1 text-ink-muted hover:bg-surface-2",
             )}

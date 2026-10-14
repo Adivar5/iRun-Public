@@ -4,6 +4,7 @@ export type IconName =
   | "alert-triangle"
   | "arrow-down"
   | "arrow-up"
+  | "caret-right"
   | "check"
   | "clock"
   | "dumbbell"

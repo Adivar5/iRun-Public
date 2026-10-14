@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { CollectingState } from "@/components/charts/collecting-state";
 import { LoopOverlay } from "@/components/runs/loop-overlay";
 import { RenameLoop } from "@/components/runs/rename-loop";
+import { BackLink } from "@/components/ui/back-link";
 import { formatLocalDay, formatPace } from "@/lib/format";
 import { getLoop, loopRoutes } from "@/lib/data/loops";
 import { supabaseServer } from "@/lib/supabase/server";
@@ -28,12 +29,10 @@ export default async function LoopDetailPage({
   const routeFor = (workoutId: string) => routes.find((route) => route.id === workoutId) ?? { lat: null, lon: null };
 
   return (
-    <div className="flex flex-col gap-4">
-      <Link href="/runs/loops" className="inline-flex min-h-11 items-center text-base text-accent-ink">
-        All loops
-      </Link>
+    <div className="flex flex-col gap-3">
+      <BackLink href="/runs/loops">All loops</BackLink>
       <div className="flex items-center justify-between gap-3">
-        <h1 className="text-base font-semibold text-ink">{loop.name}</h1>
+        <h1 className="font-display text-screen font-semibold text-ink">{loop.name}</h1>
         <RenameLoop id={loop.id} name={loop.name} />
       </div>
       {attempts.length < 2 ? (
@@ -49,7 +48,7 @@ export default async function LoopDetailPage({
               <li key={attempt.id}>
                 <Link
                   href={`/runs/loops/${loop.id}?run=${attempt.id}`}
-                  className="flex min-h-11 items-center justify-between gap-3 rounded-card border border-line px-3 text-base text-ink"
+                  className="flex min-h-11 items-center justify-between gap-3 rounded-card border border-line px-3 py-2 text-body text-ink"
                 >
                   <span>{formatLocalDay(attempt.startAt)}</span>
                   <span className="num">{formatPace(attempt.paceSPerKm)}</span>

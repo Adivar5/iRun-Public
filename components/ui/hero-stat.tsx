@@ -13,12 +13,12 @@ export function HeroStat({
   italic?: boolean;
 }) {
   return (
-    <div>
+    <div className="min-w-0">
       <p className="text-ink">
-        <span className={cn("num text-[56px] leading-none", italic && "italic")}>{value}</span>
-        {unit ? <span className="ml-1 align-baseline font-mono text-[13px] text-ink-muted">{unit}</span> : null}
+        <span className={cn("num font-hero text-hero", italic && "italic")}>{value}</span>
+        {unit ? <span className="ml-1 align-baseline font-mono text-label text-ink-muted">{unit}</span> : null}
       </p>
-      <p className="font-mono text-[13px] text-ink-muted">{label}</p>
+      <p className="font-mono text-label text-ink-muted">{label}</p>
     </div>
   );
 }

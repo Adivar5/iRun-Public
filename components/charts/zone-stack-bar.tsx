@@ -66,7 +66,7 @@ export function ZoneStackBar({
           {parts
             .filter((part) => part.seconds > 0)
             .map((part) => (
-              <li key={part.name} className="text-[12px] text-ink">
+              <li key={part.name} className="text-micro text-ink">
                 {part.label}
               </li>
             ))}

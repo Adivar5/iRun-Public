@@ -50,7 +50,7 @@ export function Toaster() {
     };
   }, []);
   return (
-    <div className="fixed inset-x-0 bottom-20 z-50 mx-auto flex w-full max-w-[430px] flex-col gap-2 px-4">
+    <div className="fixed inset-x-0 bottom-[calc(var(--chrome-bottom)+env(safe-area-inset-bottom)+0.5rem)] z-50 mx-auto flex w-full max-w-shell flex-col gap-2 px-4">
       <AnimatePresence>
         {items.map((item) => {
           const icon = item.status ? STATUS_ICON[item.status] : null;

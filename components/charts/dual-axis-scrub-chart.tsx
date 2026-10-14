@@ -139,7 +139,7 @@ export function keptSeriesIndices(
   return [...new Set(kept)].sort((left, right) => left - right);
 }
 
-const MONO = "var(--font-mono-face), ui-monospace, monospace";
+const MONO = "var(--font-body-face), system-ui, sans-serif";
 const PLOT_T = 52;
 const PLOT_B = 188;
 const VIEW_H = 220;
@@ -356,7 +356,7 @@ export function DualAxisScrubChart({
 
   return (
     <div className="flex w-full flex-col items-start gap-3">
-      <p data-scrub-readout="" className={engaged ? "flex flex-wrap gap-x-4 gap-y-1 text-base text-ink" : "text-[13px] text-ink-muted"}>
+      <p data-scrub-readout="" className={engaged ? "flex flex-wrap gap-x-4 gap-y-1 text-base text-ink" : "text-label text-ink-muted"}>
         {engaged ? (
           <>
             {showPaceMissing ? (

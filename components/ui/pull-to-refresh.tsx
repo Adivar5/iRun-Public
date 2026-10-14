@@ -73,7 +73,7 @@ export function PullToRefresh() {
 
   return (
     <div aria-live="polite" className="pointer-events-none fixed inset-x-0 top-[calc(66px+env(safe-area-inset-top))] z-30 flex justify-center">
-      {text ? <p className="rounded-full bg-surface-1 px-3 py-1 text-[13px] text-ink-muted">{text}</p> : <span className="sr-only">Pull to refresh</span>}
+      {text ? <p className="rounded-full bg-surface-1 px-3 py-1 text-label text-ink-muted">{text}</p> : <span className="sr-only">Pull to refresh</span>}
     </div>
   );
 }

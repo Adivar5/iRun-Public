@@ -36,7 +36,7 @@ export function EfficiencyLine({
         <LineChart width={300} height={180} data={data} margin={{ top: 16, right: 12, left: 0, bottom: 0 }} accessibilityLayer={false}>
           <XAxis
             dataKey="day"
-            tick={{ fontSize: 12, fill: "var(--text-muted)", fontFamily: "var(--font-mono-face), ui-monospace, monospace" }}
+            tick={{ fontSize: 12, fill: "var(--text-muted)", fontFamily: "var(--font-body-face), system-ui, sans-serif" }}
             axisLine={false}
             tickLine={false}
           />
@@ -56,7 +56,7 @@ export function EfficiencyLine({
           />
         </LineChart>
       </div>
-      <p className="mt-2 font-mono text-[12px] text-ink">
+      <p className="mt-2 font-mono text-micro text-ink">
         {first.toFixed(2)} to {last.toFixed(2)}, latest {last.toFixed(2)}
       </p>
     </div>

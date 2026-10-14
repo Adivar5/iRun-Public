@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { PageHeader } from "@/components/ui/page-header";
 import { formatLocalDay } from "@/lib/format";
 import type { InsightWeek } from "@/lib/data/insights";
 
@@ -53,15 +54,19 @@ export function InsightsScreen({
   const current = weeks[0];
   const copy = current ? weekCopy(current.status) : "This week has not been written yet.";
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-between gap-3">
-        <h1 className="font-display text-[20px] font-semibold text-ink">Insights</h1>
-        {refreshAction ? <RefreshForm action={refreshAction} refreshesLeft={refreshesLeft} /> : (
-          <Button type="button" variant="secondary">
-            {`Refresh, ${refreshesLeft} left today`}
-          </Button>
-        )}
-      </div>
+    <div className="flex flex-col gap-3">
+      <PageHeader
+        title="Insights"
+        action={
+          refreshAction ? (
+            <RefreshForm action={refreshAction} refreshesLeft={refreshesLeft} />
+          ) : (
+            <Button type="button" variant="secondary">
+              {`Refresh, ${refreshesLeft} left today`}
+            </Button>
+          )
+        }
+      />
       {copy ? <p className="text-base text-ink">{copy}</p> : null}
       {current?.status === "ok"
         ? current.cards.map((card) => <InsightCard key={card.id} card={card} at={current.at} />)
@@ -70,7 +75,7 @@ export function InsightsScreen({
         <ol className="flex flex-col gap-3 border-l border-line pl-4">
           {weeks.map((week) => (
             <li key={week.weekStart} className="flex flex-col gap-1">
-              <span className="font-mono text-[12px] text-ink-muted">{formatLocalDay(`${week.weekStart}T12:00:00.000Z`)}</span>
+              <span className="font-mono text-micro text-ink-muted">{formatLocalDay(`${week.weekStart}T12:00:00.000Z`)}</span>
               <span className="text-base text-ink">{weekCopy(week.status) ?? `${week.cards.length} cards`}</span>
             </li>
           ))}

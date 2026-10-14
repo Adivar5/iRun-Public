@@ -3,7 +3,11 @@
 import { useSelectedLayoutSegment } from "next/navigation";
 import { useSyncExternalStore, type ReactNode } from "react";
 
-import { Skeleton } from "@/components/ui/skeleton";
+import { InsightsSkeleton } from "@/components/skeletons/insights";
+import { RunsSkeleton } from "@/components/skeletons/runs";
+import { StrengthSkeleton } from "@/components/skeletons/strength";
+import { TodaySkeleton } from "@/components/skeletons/today";
+import { TrendsSkeleton } from "@/components/skeletons/trends";
 
 type TabKey = "today" | "runs" | "trends" | "insights" | "strength";
 
@@ -38,15 +42,18 @@ function currentTab(segment: string | null): (typeof TABS)[number] {
   return "today";
 }
 
+const SKELETON: Record<TabKey, () => ReactNode> = {
+  today: TodaySkeleton,
+  runs: RunsSkeleton,
+  trends: TrendsSkeleton,
+  insights: InsightsSkeleton,
+  strength: StrengthSkeleton,
+};
+
 export function TabStage({ children }: { children: ReactNode }) {
   const waiting = useSyncExternalStore(subscribeTabPending, getTabPending, () => null);
   const active = currentTab(useSelectedLayoutSegment());
   if (!waiting || waiting === active) return children;
-  return (
-    <div className="flex flex-col gap-3" aria-hidden>
-      <Skeleton className="h-6 w-32" />
-      <Skeleton className="h-40 w-full" />
-      <Skeleton className="h-40 w-full" />
-    </div>
-  );
+  const PendingSkeleton = SKELETON[waiting];
+  return <PendingSkeleton />;
 }

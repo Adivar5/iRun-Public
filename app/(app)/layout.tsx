@@ -10,8 +10,10 @@ import { supabaseServer } from "@/lib/supabase/server";
 
 function TabFallback() {
   return (
-    <div aria-hidden className="fixed inset-x-3 bottom-0 z-40 pb-[env(safe-area-inset-bottom)]">
-      <div className="mx-auto mb-3 h-16 max-w-[430px] rounded-[24px] border border-line bg-surface-1" />
+    <div aria-hidden className="fixed inset-x-0 bottom-0 z-40 pb-[env(safe-area-inset-bottom)]">
+      <div className="mx-auto max-w-shell px-4">
+        <div className="mb-3 h-16 rounded-full border border-line bg-surface-1" />
+      </div>
     </div>
   );
 }
@@ -28,7 +30,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
       <Suspense fallback={<TopBar />}>
         <SyncTopBar />
       </Suspense>
-      <main className="mx-auto max-w-[430px] px-4 pb-[calc(7.5rem+env(safe-area-inset-bottom))] pt-[calc(66px+env(safe-area-inset-top))]">
+      <main className="mx-auto max-w-shell px-4 pt-[calc(var(--chrome-top)+env(safe-area-inset-top)+var(--gutter))] pb-[calc(var(--chrome-bottom)+env(safe-area-inset-bottom)+var(--gutter))]">
         <TabStage>{children}</TabStage>
       </main>
       <Suspense fallback={<TabFallback />}>

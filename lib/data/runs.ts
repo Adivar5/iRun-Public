@@ -139,27 +139,29 @@ function zonesFromSamples(
 }
 
 export async function getRunDetail(sb: SupabaseClient<Database>, id: string): Promise<RunDetail | null> {
-  const { data: workout, error } = await sb
-    .from("workouts")
-    .select("id, start_at, distance_m, duration_s, moving_s, avg_hr, has_hr, run_kind, zone_seconds")
-    .eq("id", id)
-    .eq("type", "run")
-    .maybeSingle();
-  if (error) throw new Error("Could not load the run");
-  if (!workout) return null;
-
-  const [samples, splits, earlier, profile] = await Promise.all([
-    sb.from("workout_samples").select("t, d, hr, v, alt, lat, lon").eq("workout_id", id).maybeSingle(),
-    sb.from("splits").select("km_index, pace_s_per_km, avg_hr").eq("workout_id", id).order("km_index", { ascending: true }),
+  // The samples row is the heaviest read and does not depend on the workout row, so it starts
+  // at the same time instead of waiting behind it. Only the earlier-runs lookup needs start_at.
+  const [workoutRes, samples, splits, profile] = await Promise.all([
     sb
       .from("workouts")
-      .select("distance_m, duration_s, moving_s")
+      .select("id, start_at, distance_m, duration_s, moving_s, avg_hr, has_hr, run_kind, zone_seconds")
+      .eq("id", id)
       .eq("type", "run")
-      .lt("start_at", workout.start_at)
-      .order("start_at", { ascending: false })
-      .limit(40),
+      .maybeSingle(),
+    sb.from("workout_samples").select("t, d, hr, v, alt, lat, lon").eq("workout_id", id).maybeSingle(),
+    sb.from("splits").select("km_index, pace_s_per_km, avg_hr").eq("workout_id", id).order("km_index", { ascending: true }),
     sb.from("profiles").select("max_hr, zone_bounds").maybeSingle(),
   ]);
+  const { data: workout, error } = workoutRes;
+  if (error) throw new Error("Could not load the run");
+  if (!workout) return null;
+  const earlier = await sb
+    .from("workouts")
+    .select("distance_m, duration_s, moving_s")
+    .eq("type", "run")
+    .lt("start_at", workout.start_at)
+    .order("start_at", { ascending: false })
+    .limit(40);
   if (samples.error) throw new Error("Could not load the run");
   if (splits.error) throw new Error("Could not load the run");
   if (earlier.error) throw new Error("Could not load the run");

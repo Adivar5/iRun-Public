@@ -39,7 +39,7 @@ export function SegmentedControl<T extends string>({
             key={option.value}
             value={option.value}
             className={cn(
-              "relative min-h-11 min-w-11 flex-1 rounded-full px-3 text-[13px] font-medium text-ink-muted hover:bg-surface-2",
+              "relative min-h-11 min-w-11 flex-1 rounded-full px-3 text-label font-medium text-ink-muted hover:bg-surface-2",
               press,
               on && "text-on-accent",
             )}

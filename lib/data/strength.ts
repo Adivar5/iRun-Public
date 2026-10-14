@@ -72,42 +72,35 @@ function toSession(row: WorkoutRow, setCount: number): StrengthSession {
   };
 }
 
-async function setCounts(sb: SupabaseClient<Database>, ids: string[]): Promise<Map<string, number>> {
-  const counts = new Map<string, number>();
-  if (ids.length === 0) return counts;
-  const { data, error } = await sb.from("strength_sets").select("workout_id").in("workout_id", ids);
-  if (error) throw new Error("Could not load strength sets");
-  for (const row of data ?? []) counts.set(row.workout_id, (counts.get(row.workout_id) ?? 0) + 1);
-  return counts;
-}
-
 const SESSION_COLUMNS = "id, name, start_at, duration_s, avg_hr, has_hr, energy_kcal, is_leg_day, leg_day_source";
+// The set count rides along in the same query (an embedded count), so there is no second round
+// trip and no download of every set row just to count them.
+const LIST_COLUMNS = `${SESSION_COLUMNS}, strength_sets(count)`;
+
+const embeddedSetCount = (row: { strength_sets: { count: number }[] }): number => row.strength_sets[0]?.count ?? 0;
 
 export async function listStrength(sb: SupabaseClient<Database>): Promise<StrengthSession[]> {
   const { data, error } = await sb
     .from("workouts")
-    .select(SESSION_COLUMNS)
+    .select(LIST_COLUMNS)
     .eq("type", "strength")
     .order("start_at", { ascending: false })
     .limit(40);
   if (error) throw new Error("Could not load strength sessions");
-  const rows = data ?? [];
-  const counts = await setCounts(sb, rows.map((row) => row.id));
-  return rows.map((row) => toSession(row, counts.get(row.id) ?? 0));
+  return (data ?? []).map((row) => toSession(row, embeddedSetCount(row)));
 }
 
 export async function latestStrength(sb: SupabaseClient<Database>): Promise<StrengthSession | null> {
   const { data, error } = await sb
     .from("workouts")
-    .select(SESSION_COLUMNS)
+    .select(LIST_COLUMNS)
     .eq("type", "strength")
     .order("start_at", { ascending: false })
     .limit(1)
     .maybeSingle();
   if (error) throw new Error("Could not load the latest strength session");
   if (!data) return null;
-  const counts = await setCounts(sb, [data.id]);
-  return toSession(data, counts.get(data.id) ?? 0);
+  return toSession(data, embeddedSetCount(data));
 }
 
 export async function getStrengthSession(
@@ -148,15 +141,18 @@ export async function getStrengthHome(
   days: { date: string; runKm: number; strength: boolean; legDay: boolean }[];
   hoursSinceLegDay: number | null;
 }> {
-  const sessions = await listStrength(sb);
   const start = weekStartLocal(now.toISOString());
   const fromDate = addUtcDays(start, -7 * 11);
-  const { data, error } = await sb
-    .from("workouts")
-    .select("start_at, distance_m, type, is_leg_day, leg_day_source, name")
-    .gte("start_at", `${fromDate}T00:00:00.000Z`)
-    .order("start_at", { ascending: true })
-    .limit(2000);
+  // The session list and the calendar do not depend on each other, so they load together.
+  const [sessions, { data, error }] = await Promise.all([
+    listStrength(sb),
+    sb
+      .from("workouts")
+      .select("start_at, distance_m, type, is_leg_day, leg_day_source, name")
+      .gte("start_at", `${fromDate}T00:00:00.000Z`)
+      .order("start_at", { ascending: true })
+      .limit(2000),
+  ]);
   if (error) throw new Error("Could not load the training calendar");
   const days: { date: string; runKm: number; strength: boolean; legDay: boolean }[] = [];
   let cursor = fromDate;

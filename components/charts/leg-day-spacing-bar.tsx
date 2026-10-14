@@ -56,7 +56,7 @@ export function LegDaySpacingBar({
           />
           <span className="absolute top-0 h-3 w-px" style={{ left: `${mark}%`, background: "var(--text)" }} />
         </div>
-        <p className="mt-1 font-mono text-[12px] text-ink-muted">24 h mark</p>
+        <p className="mt-1 font-mono text-micro text-ink-muted">24 h mark</p>
       </div>
       <p data-status={status} className={`inline-flex items-center gap-1.5 text-base ${enough ? "text-good" : "text-watch"}`}>
         <Icon name={enough ? "check" : "clock"} />

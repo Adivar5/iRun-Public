@@ -38,9 +38,9 @@ export function SyncPill(props: SyncPillProps) {
     <span
       role="status"
       data-status={status}
-      className={cn("inline-flex max-w-full items-center gap-1.5 text-[12px]", STATUS_TEXT[status])}
+      className={cn("inline-flex max-w-full items-center gap-1 text-micro", STATUS_TEXT[status])}
     >
-      <Icon name={icon} />
+      <Icon name={icon} className="size-4" />
       <span className="truncate">{text}</span>
     </span>
   );

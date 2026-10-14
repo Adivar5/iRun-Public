@@ -3,10 +3,10 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { fieldClass } from "@/components/ui/field";
 import { supabaseBrowser } from "@/lib/supabase/client";
 
-const field =
-  "h-11 w-full rounded-btn border border-line bg-surface-1 px-3 text-base text-ink tracking-[0.3em] outline-solid outline-2 outline-offset-2 outline-transparent transition-[outline-color] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none";
+const field = `${fieldClass} tracking-[0.3em]`;
 
 const WRONG = "That code didn't work. Codes change every 30 seconds, try the newest one.";
 
@@ -120,8 +120,8 @@ export default function EnrollPage() {
   }
 
   return (
-    <main className="mx-auto flex min-h-dvh w-full max-w-[430px] flex-col justify-center px-4 py-10">
-      <h1 className="font-display text-[32px] font-semibold text-ink">Add your authenticator</h1>
+    <main className="mx-auto flex min-h-dvh w-full max-w-shell flex-col justify-center px-4 py-10">
+      <h1 className="font-display text-screen font-semibold text-ink">Add your authenticator</h1>
       <p className="mt-2 text-base text-ink-muted">
         Scan the code, or type the key into your app, then enter the 6-digit code it shows.
       </p>
@@ -142,11 +142,11 @@ export default function EnrollPage() {
             className="h-[180px] w-[180px] rounded-card bg-white p-2"
           />
           <div className="flex flex-col gap-1">
-            <span className="text-[13px] text-ink-muted">Manual entry key</span>
+            <span className="text-label text-ink-muted">Manual entry key</span>
             <p className="num break-all text-base text-ink">{enrollment.secret}</p>
           </div>
           <div className="flex flex-col gap-1">
-            <label htmlFor="code" className="text-[13px] text-ink-muted">
+            <label htmlFor="code" className="text-label text-ink-muted">
               6-digit code
             </label>
             <input

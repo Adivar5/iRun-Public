@@ -3,6 +3,7 @@
 
 import { useId } from "react";
 import { Icon } from "./icon";
+import { fieldClass } from "./field";
 import { press } from "./press";
 
 export function NumberField({
@@ -29,7 +30,7 @@ export function NumberField({
   }
   return (
     <div className="flex flex-col gap-1">
-      <label htmlFor={id} className="text-[13px] text-ink-muted">
+      <label htmlFor={id} className="text-label text-ink-muted">
         {label}
       </label>
       <div className="flex items-center gap-2">
@@ -43,7 +44,7 @@ export function NumberField({
         </button>
         <input
           id={id}
-          className="num h-11 w-20 rounded-btn border border-line bg-surface-1 text-center text-base text-ink"
+          className={`num ${fieldClass.replace("w-full", "w-20")} text-center`}
           type="number"
           inputMode="decimal"
           min={min}
@@ -61,7 +62,7 @@ export function NumberField({
             }
           }}
         />
-        {unit ? <span className="text-[13px] text-ink-muted">{unit}</span> : null}
+        {unit ? <span className="text-label text-ink-muted">{unit}</span> : null}
         <button
           type="button"
           aria-label={`Increase ${label}`}

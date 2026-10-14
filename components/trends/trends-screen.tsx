@@ -10,6 +10,7 @@ import { PaceDistanceCurve } from "@/components/charts/pace-distance-curve";
 import { VolumeBars } from "@/components/charts/volume-bars";
 import { ZoneStackBar } from "@/components/charts/zone-stack-bar";
 import { SegmentedControl } from "@/components/ui/segmented-control";
+import { PageHeader } from "@/components/ui/page-header";
 import { formatPace } from "@/lib/format";
 import type { TrendRange, TrendsView, VolumeTrend } from "@/lib/data/trends";
 
@@ -24,7 +25,7 @@ export function TrendsChrome({ range }: { range: TrendRange }) {
   const router = useRouter();
   return (
     <>
-      <h1 className="font-display text-[20px] font-semibold text-ink">Trends</h1>
+      <PageHeader title="Trends" />
       <SegmentedControl
         label="Trend range"
         options={RANGES}
@@ -104,7 +105,7 @@ export function TrendsRest({ view }: { view: TrendsView }) {
         }}
       >
         {view.maxHr == null && !hideZoneNudge ? (
-          <p className="mb-3 flex flex-wrap items-center gap-3 text-base text-ink">
+          <p className="mb-2 flex flex-wrap items-center gap-3 text-body text-ink">
             <a href="/settings" className="text-accent-ink">
               Set max heart rate
             </a>
@@ -121,7 +122,7 @@ export function TrendsRest({ view }: { view: TrendsView }) {
 
 export function TrendsScreen({ view }: { view: TrendsView }) {
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-3">
       <TrendsChrome range={view.range} />
       <TrendsVolumeCard view={view} />
       <TrendsRest view={view} />

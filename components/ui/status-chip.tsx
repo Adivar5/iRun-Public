@@ -1,7 +1,6 @@
 // built to spec, 21st id 24882 pending
 import { cn } from "@/lib/cn";
 import { Icon, type IconName } from "./icon";
-import { press } from "./press";
 
 export type Status = "good" | "watch" | "alert";
 
@@ -22,8 +21,7 @@ export function StatusChip({ status, label }: { status: Status; label: string })
     <span
       data-status={status}
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-full border border-line px-2.5 py-1 text-[13px] hover:bg-surface-2",
-        press,
+        "inline-flex items-center gap-1.5 rounded-full border border-line px-2.5 py-1 text-label",
         STATUS_TEXT[status],
       )}
     >

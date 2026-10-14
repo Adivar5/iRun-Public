@@ -23,7 +23,7 @@ export function DeltaChip({
       aria-label={name}
       data-status={good == null ? undefined : good ? "good" : "alert"}
       className={cn(
-        "inline-flex items-center gap-1 text-[13px]",
+        "inline-flex items-center gap-1 text-label",
         good === true && "text-good",
         good === false && "text-alert",
         good == null && "text-ink-muted",

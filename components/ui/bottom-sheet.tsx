@@ -109,11 +109,11 @@ export function BottomSheet({
         <Drawer.Overlay className="irun-sheet-overlay fixed inset-0 z-50 bg-bg/80" />
         <Drawer.Content
           aria-describedby={undefined}
-          className="irun-sheet fixed inset-x-0 bottom-0 z-50 mx-auto flex h-full w-full max-w-[430px] flex-col rounded-t-sheet border border-line bg-surface-2 shadow-[inset_0_1px_0_rgb(255_255_255/0.04)] outline-none"
+          className="irun-sheet fixed inset-x-0 bottom-0 z-50 mx-auto flex h-full w-full max-w-shell flex-col rounded-t-sheet border border-line bg-surface-2 shadow-[inset_0_1px_0_rgb(255_255_255/0.04)] outline-none"
         >
           <Drawer.Handle aria-hidden className="mx-auto mt-3 h-1 w-10 shrink-0 rounded-full bg-line" />
           <div className="flex items-center justify-between gap-3 px-4 pt-3">
-            <Drawer.Title className="font-display text-[20px] font-semibold text-ink">{title}</Drawer.Title>
+            <Drawer.Title className="font-display text-title font-semibold text-ink">{title}</Drawer.Title>
             <Drawer.Close
               aria-label="Close"
               className={`grid size-11 min-h-11 min-w-11 shrink-0 place-items-center rounded-btn text-ink hover:bg-surface-1 ${press}`}

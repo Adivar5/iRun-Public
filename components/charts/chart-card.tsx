@@ -2,8 +2,8 @@
 
 import type { ReactNode } from "react";
 
+import { Card } from "@/components/ui/card";
 import { SourceFootnote } from "@/components/ui/source-footnote";
-import { press } from "@/components/ui/press";
 
 import { ChartTableSheet } from "./chart-table-sheet";
 
@@ -21,12 +21,12 @@ export function ChartCard({
   children: ReactNode;
 }) {
   return (
-    <section className={`flex flex-col items-start gap-3 rounded-card border border-line bg-surface-1 p-4 ${press}`}>
-      <h2 className="font-body text-base font-semibold text-ink">{question}</h2>
+    <Card as="section" className="flex flex-col items-start gap-3">
+      <h2 className="font-body text-body font-semibold text-ink">{question}</h2>
       <div className="w-full min-w-0">{children}</div>
-      <p className="text-base text-ink">{answer}</p>
+      <p className="mt-1 text-body text-ink">{answer}</p>
       <ChartTableSheet title={table.title} columns={table.columns} rows={table.rows} />
       {source ? <SourceFootnote source="Strava" at={source.at} now={source.now} /> : null}
-    </section>
+    </Card>
   );
 }

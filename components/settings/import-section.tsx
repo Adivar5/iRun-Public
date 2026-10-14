@@ -21,7 +21,7 @@ export function ImportSection({
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-1">
-        <label htmlFor={id} className="text-[13px] text-ink-muted">
+        <label htmlFor={id} className="text-label text-ink-muted">
           Strava archive
         </label>
         <input
@@ -38,7 +38,7 @@ export function ImportSection({
       </div>
       {progress ? (
         <div className="flex flex-col gap-2">
-          <p className="num text-[13px] text-ink-muted">
+          <p className="num text-label text-ink-muted">
             {progress.done} of {progress.total}
           </p>
           <div

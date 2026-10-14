@@ -4,9 +4,14 @@ import { useId } from "react";
 
 import { ChartEmpty, ChartTableSheet, chartEaseStyle } from "./chart-table-sheet";
 import { seriesIndices } from "./downsample";
-import { paceBucket, projectRoute } from "./geo";
+import { paceBucket, projectMap, projectRoute } from "./geo";
 
 type Size = "thumb" | "detail";
+
+// OpenStreetMap standard tiles. Private single-user use; the credit link below is the attribution they ask for.
+const tileUrl = (z: number, x: number, y: number) => `https://tile.openstreetmap.org/${z}/${x}/${y}.png`;
+// Light tiles glare on the dark theme, so flip and dim them there.
+const darkTiles = "[[data-theme=dark]_&]:[filter:invert(1)_hue-rotate(180deg)_brightness(0.8)_contrast(0.9)]";
 
 const CANVAS_BOX: Record<Size, { w: number; h: number; stroke: number }> = {
   thumb: { w: 88, h: 88, stroke: 2 },
@@ -41,6 +46,9 @@ function RouteEnds({
         x={clamp(start.x, 28, width - 28)}
         y={clamp(startY, 14, height - 4)}
         fill="var(--text)"
+        stroke="var(--surface-1)"
+        strokeWidth={3}
+        paintOrder="stroke"
         fontSize="12"
         textAnchor="middle"
       >
@@ -50,6 +58,9 @@ function RouteEnds({
         x={clamp(finish.x, 22, width - 22)}
         y={clamp(finishY, 14, height - 4)}
         fill="var(--text)"
+        stroke="var(--surface-1)"
+        strokeWidth={3}
+        paintOrder="stroke"
         fontSize="12"
         textAnchor="middle"
       >
@@ -111,7 +122,8 @@ export function RouteCanvas({
   const keep = new Set(keptRouteIndices(lat, lon));
   const maskedLat = lat.map((value, index) => (keep.has(index) ? value : null));
   const maskedLon = lon.map((value, index) => (keep.has(index) ? value : null));
-  const points = projectRoute(maskedLat, maskedLon, box.w, box.h, size === "thumb" ? 10 : 16);
+  const map = size === "detail" ? projectMap(maskedLat, maskedLon, box.w, box.h, 16) : null;
+  const points = map?.points ?? projectRoute(maskedLat, maskedLon, box.w, box.h, size === "thumb" ? 10 : 16);
   if (points.length < 2) {
     return (
       <ChartEmpty message="No route recorded">
@@ -163,6 +175,8 @@ export function RouteCanvas({
         width={size === "thumb" ? box.w : "100%"}
         height={box.h}
         viewBox={`0 0 ${box.w} ${box.h}`}
+        // The box always matches the viewBox, so the map neither crops nor letterboxes at any shell width.
+        style={map ? { aspectRatio: `${box.w} / ${box.h}`, height: "auto" } : undefined}
         className="block max-w-full overflow-hidden rounded-card"
       >
         <defs>
@@ -173,9 +187,32 @@ export function RouteCanvas({
         <style>{chartEaseStyle}</style>
         <rect width={box.w} height={box.h} fill="var(--surface-1)" />
         <rect width={box.w} height={box.h} fill={`url(#${gridId})`} />
-        {segments.map((segment) => (
+        {map?.tiles.map((tile) => (
+          <image
+            key={`${tile.z}/${tile.x}/${tile.y}/${tile.px}`}
+            href={tileUrl(tile.z, tile.x, tile.y)}
+            x={tile.px}
+            y={tile.py}
+            width={tile.size + 0.5}
+            height={tile.size + 0.5}
+            aria-hidden="true"
+            className={darkTiles}
+          />
+        ))}
+        {map ? (
           <path
-            key={segment.d}
+            d={points.map((point, index) => `${index === 0 ? "M" : "L"}${point.x.toFixed(1)} ${point.y.toFixed(1)}`).join("")}
+            fill="none"
+            stroke="var(--surface-2)"
+            strokeWidth={box.stroke + 3}
+            strokeOpacity={0.9}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        ) : null}
+        {segments.map((segment, index) => (
+          <path
+            key={`${index}-${segment.bucket}`}
             d={segment.d}
             fill="none"
             stroke={`var(--pace-${segment.bucket})`}
@@ -204,12 +241,22 @@ export function RouteCanvas({
         ) : null}
       </svg>
       {size === "detail" ? (
-        <p className="flex items-center gap-2 text-[12px] text-ink">
+        <p className="flex items-center gap-2 text-micro text-ink">
           <span aria-hidden className="inline-block size-2" style={{ background: "var(--pace-0)" }} />
           Slow
           <span aria-hidden className="inline-block size-2" style={{ background: "var(--pace-3)" }} />
           Fast
         </p>
+      ) : null}
+      {map ? (
+        <a
+          href="https://www.openstreetmap.org/copyright"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-micro text-ink-muted underline"
+        >
+          © OpenStreetMap contributors
+        </a>
       ) : null}
       <ChartTableSheet title="Route" columns={["Point", "Latitude", "Longitude"]} rows={rows} />
     </div>

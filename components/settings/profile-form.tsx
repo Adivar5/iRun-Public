@@ -5,10 +5,10 @@ import { ProfileInput, profileFieldErrors, type ProfileValues } from "@/app/(app
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { NumberField } from "@/components/ui/number-field";
+import { fieldClass } from "@/components/ui/field";
 import { formatPace } from "@/lib/format";
 
-const field =
-  "num h-11 w-28 rounded-btn border border-line bg-surface-1 px-3 text-center text-base text-ink";
+const field = `num ${fieldClass.replace("w-full", "w-28")} text-center`;
 
 const ZONE_LABELS = ["Zone 1 ends", "Zone 2 ends", "Zone 3 ends", "Zone 4 ends"] as const;
 
@@ -119,7 +119,7 @@ export function ProfileForm({
           </p>
         ) : null}
         <div className="flex flex-col gap-1">
-          <label htmlFor="goal-pace" className="text-[13px] text-ink-muted">
+          <label htmlFor="goal-pace" className="text-label text-ink-muted">
             5k goal pace
           </label>
           <div className="flex items-center gap-2">
@@ -133,7 +133,7 @@ export function ProfileForm({
               className={field}
               onChange={(event) => setPaceText(event.target.value)}
             />
-            <span className="text-[13px] text-ink-muted">/km</span>
+            <span className="text-label text-ink-muted">/km</span>
           </div>
           {paceError ? (
             <p role="alert" className="text-base text-alert">
@@ -147,7 +147,7 @@ export function ProfileForm({
           ) : null}
         </div>
         <div className="flex flex-col gap-1">
-          <label htmlFor="goal-10k-pace" className="text-[13px] text-ink-muted">
+          <label htmlFor="goal-10k-pace" className="text-label text-ink-muted">
             10k goal pace
           </label>
           <div className="flex items-center gap-2">
@@ -160,7 +160,7 @@ export function ProfileForm({
               className={field}
               onChange={(event) => setPace10kText(event.target.value)}
             />
-            <span className="text-[13px] text-ink-muted">/km</span>
+            <span className="text-label text-ink-muted">/km</span>
           </div>
           {errors.goal10kPaceSPerKm ? (
             <p role="alert" className="text-base text-alert">
@@ -169,9 +169,9 @@ export function ProfileForm({
           ) : null}
         </div>
         <div className="flex flex-col gap-2">
-          <p className="text-[13px] text-ink-muted">Custom goal, optional</p>
+          <p className="text-label text-ink-muted">Custom goal, optional</p>
           <div className="flex flex-wrap items-center gap-2">
-            <label htmlFor="custom-km" className="text-[13px] text-ink-muted">
+            <label htmlFor="custom-km" className="text-label text-ink-muted">
               Distance
             </label>
             <input
@@ -183,10 +183,10 @@ export function ProfileForm({
               className={field}
               onChange={(event) => setCustomKmText(event.target.value)}
             />
-            <span className="text-[13px] text-ink-muted">km</span>
+            <span className="text-label text-ink-muted">km</span>
           </div>
           <div className="flex flex-wrap items-center gap-2">
-            <label htmlFor="custom-pace" className="text-[13px] text-ink-muted">
+            <label htmlFor="custom-pace" className="text-label text-ink-muted">
               Pace
             </label>
             <input
@@ -199,7 +199,7 @@ export function ProfileForm({
               className={field}
               onChange={(event) => setCustomPaceText(event.target.value)}
             />
-            <span className="text-[13px] text-ink-muted">/km</span>
+            <span className="text-label text-ink-muted">/km</span>
           </div>
           {errors.customDistanceKm ? (
             <p role="alert" className="text-base text-alert">
@@ -248,7 +248,7 @@ export function ProfileForm({
             </p>
           ) : null}
         </div>
-        <p className="text-[13px] text-ink-muted">Distances stay in kilometres.</p>
+        <p className="text-label text-ink-muted">Distances stay in kilometres.</p>
         <Button type="submit" className="w-full" loading={pending}>
           Save profile
         </Button>

@@ -189,13 +189,13 @@ export function StravaSection({
                 <li key={entry.id} className="flex flex-col gap-1 border-b border-line pb-3 last:border-b-0 last:pb-0">
                   <div className="flex items-center justify-between gap-3">
                     <StatusChip status={view.tone} label={view.word} />
-                    <time dateTime={entry.receivedAt} className="num text-[13px] text-ink-muted">
+                    <time dateTime={entry.receivedAt} className="num text-label text-ink-muted">
                       {TIME.format(new Date(entry.receivedAt))}
                     </time>
                   </div>
                   <p className="text-base text-ink">{detail}</p>
                   {entry.count > 0 ? (
-                    <p className="text-[13px] text-ink-muted">
+                    <p className="text-label text-ink-muted">
                       {entry.count === 1 ? "1 activity" : `${entry.count} activities`}
                     </p>
                   ) : null}

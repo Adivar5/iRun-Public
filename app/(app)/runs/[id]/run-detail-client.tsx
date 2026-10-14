@@ -1,7 +1,6 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import Link from "next/link";
 
 import { DualAxisScrubChart } from "@/components/charts/dual-axis-scrub-chart";
 import { ElevationProfile } from "@/components/charts/elevation-profile";
@@ -9,9 +8,8 @@ import { RouteCanvas } from "@/components/charts/route-canvas";
 import { SplitBars } from "@/components/charts/split-bars";
 import { ZoneStackBar } from "@/components/charts/zone-stack-bar";
 import { Card } from "@/components/ui/card";
+import { BackLink } from "@/components/ui/back-link";
 import { DeltaChip } from "@/components/ui/delta-chip";
-import { press } from "@/components/ui/press";
-import { cn } from "@/lib/cn";
 import type { RunDetail } from "@/lib/data/runs";
 import { formatDuration, formatKm, formatLocalDay, formatPace } from "@/lib/format";
 import type { RunKind } from "@/supabase/functions/_shared/metrics/index.ts";
@@ -39,14 +37,14 @@ function paceSeries(samples: NonNullable<RunDetail["samples"]>): (number | null)
 function Stat({ label, value, unit }: { label: string; value: string; unit?: string }) {
   return (
     <div className="min-w-0">
-      <dt className="text-[12px] text-ink-muted">{label}</dt>
+      <dt className="text-micro text-ink-muted">{label}</dt>
       <dd className="text-ink">
         {value === "No heart rate" || value === "No pace" ? (
-          <span className="text-[13px] leading-tight">{value}</span>
+          <span className="text-label leading-tight">{value}</span>
         ) : (
           <>
             <span className="num text-base">{value}</span>
-            {unit ? <span className="text-[12px] text-ink-muted"> {unit}</span> : null}
+            {unit ? <span className="text-micro text-ink-muted"> {unit}</span> : null}
           </>
         )}
       </dd>
@@ -80,16 +78,14 @@ export function RunDetailClient({ run }: { run: RunDetail }) {
 
   return (
     <div className="flex flex-col gap-3">
-      <header className="pb-3">
-        <Link href="/runs" className={cn("inline-flex min-h-11 items-center text-base text-accent-ink", press)}>
-          All runs
-        </Link>
-        <h1 className="text-base font-medium text-ink">
+      <header className="flex flex-col gap-1">
+        <BackLink href="/runs">All runs</BackLink>
+        <h1 className="font-display text-screen font-semibold text-ink">
           {formatLocalDay(run.startAt)}
           {kind ? <span className="text-ink-muted"> · {kind}</span> : null}
         </h1>
-        {point == null ? null : <p className="text-[13px] text-ink-muted">This point on the run</p>}
-        <dl aria-live="polite" className="mt-1 grid grid-cols-4 gap-2">
+        {point == null ? null : <p className="text-label text-ink-muted">This point on the run</p>}
+        <dl aria-live="polite" className="mt-3 grid grid-cols-2 gap-x-4 gap-y-3 sm:grid-cols-4">
           <Stat label="Distance" value={distance} unit="km" />
           <Stat label="Time" value={time} />
           <Stat label="Pace" value={paceValue} unit={paceValue === "No pace" ? undefined : "/km"} />
@@ -98,7 +94,7 @@ export function RunDetailClient({ run }: { run: RunDetail }) {
       </header>
 
       <Card>
-        <h2 className="mb-2 text-base font-medium text-ink">Route</h2>
+        <h2 className="mb-3 font-display text-title font-semibold text-ink">Route</h2>
         <RouteCanvas
           lat={run.samples?.lat ?? null}
           lon={run.samples?.lon ?? null}
@@ -109,7 +105,7 @@ export function RunDetailClient({ run }: { run: RunDetail }) {
       </Card>
 
       <Card>
-        <h2 className="mb-2 text-base font-medium text-ink">Pace and heart rate</h2>
+        <h2 className="mb-3 font-display text-title font-semibold text-ink">Pace and heart rate</h2>
         {run.samples ? (
           <DualAxisScrubChart t={run.samples.t} paceSPerKm={paces} hr={run.samples.hr} onScrub={setIndex} />
         ) : (
@@ -118,22 +114,22 @@ export function RunDetailClient({ run }: { run: RunDetail }) {
       </Card>
 
       <Card>
-        <h2 className="mb-2 text-base font-medium text-ink">Splits</h2>
+        <h2 className="mb-3 font-display text-title font-semibold text-ink">Splits</h2>
         <SplitBars splits={run.splits} />
       </Card>
 
       <Card>
-        <h2 className="mb-2 text-base font-medium text-ink">Zones</h2>
+        <h2 className="mb-3 font-display text-title font-semibold text-ink">Zones</h2>
         <ZoneStackBar seconds={run.zoneSeconds} hasHeartRate={run.avgHr != null} />
       </Card>
 
       <Card>
-        <h2 className="mb-2 text-base font-medium text-ink">Elevation</h2>
+        <h2 className="mb-3 font-display text-title font-semibold text-ink">Elevation</h2>
         <ElevationProfile d={run.samples?.d ?? []} alt={run.samples?.alt ?? null} />
       </Card>
 
       <Card>
-        <h2 className="mb-2 text-base font-medium text-ink">Vs last similar run</h2>
+        <h2 className="mb-3 font-display text-title font-semibold text-ink">Vs last similar run</h2>
         {delta == null ? (
           <p className="text-base text-ink">No similar run to compare.</p>
         ) : (
@@ -155,7 +151,7 @@ function PaceCompare({ delta }: { delta: number }) {
         value={formatPace(Math.abs(rounded))}
         unit="/km"
       />
-      <span className="text-[13px] text-ink-muted">vs last similar run</span>
+      <span className="text-label text-ink-muted">vs last similar run</span>
     </p>
   );
 }

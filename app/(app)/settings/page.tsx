@@ -1,9 +1,8 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
 import { AboutSection } from "@/components/settings/about-section";
 import { SettingsScreen } from "@/components/settings/settings-screen";
+import { BackLink } from "@/components/ui/back-link";
 import { ErrorBanner } from "@/components/ui/error-banner";
-import { press } from "@/components/ui/press";
 import { routeForAal } from "@/lib/auth/aal";
 import { loadSettings, noticeCode, stravaNotice } from "@/lib/data/settings";
 import { supabaseServer } from "@/lib/supabase/server";
@@ -40,13 +39,11 @@ export default async function SettingsPage({
   const totpEnrolled = Boolean(factors.data?.totp.some((factor) => factor.status === "verified"));
 
   return (
-    <main className="mx-auto flex w-full max-w-[430px] flex-col gap-8 pb-[max(2rem,env(safe-area-inset-bottom))]">
-      <header className="flex flex-col gap-3">
-        <Link href="/today" className={`inline-flex min-h-11 items-center self-start text-base text-accent-ink ${press}`}>
-          Today
-        </Link>
-        <h1 className="font-display text-[32px] font-semibold text-ink">Settings</h1>
-        <p className="text-base text-ink-muted">Zones, the 5k, and the Strava link that fills Today.</p>
+    <div className="flex flex-col gap-6">
+      <header className="flex flex-col gap-1">
+        <BackLink href="/today">Today</BackLink>
+        <h1 className="font-display text-screen font-semibold text-ink">Settings</h1>
+        <p className="text-body text-ink-muted">Zones, the 5k, and the Strava link that fills Today.</p>
       </header>
       {notice ? (
         <p role="status" className="text-base text-ink">
@@ -71,6 +68,6 @@ export default async function SettingsPage({
         <ErrorBanner message="Settings could not be loaded." />
       )}
       <AboutSection />
-    </main>
+    </div>
   );
 }

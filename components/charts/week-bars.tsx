@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 
+import { cn } from "@/lib/cn";
+
 import { ChartTableSheet } from "./chart-table-sheet";
 
 const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"] as const;
@@ -32,7 +34,7 @@ export function WeekBars({
     return (
       <div className="flex w-full flex-col items-start gap-1">
         <p className="text-base text-ink">No runs this week.</p>
-        <p className="font-mono text-[13px] text-ink-muted">
+        <p className="font-mono text-label text-ink-muted">
           Target {targetMinKm} to {targetMaxKm} km
         </p>
       </div>
@@ -49,7 +51,7 @@ export function WeekBars({
     <div className="flex w-full flex-col items-start gap-3">
       <p aria-hidden="true" className="num text-base text-ink">
         {totalLabel}
-        <span className="text-[13px] text-ink-muted">
+        <span className="text-label text-ink-muted">
           {" "}
           / {targetMinKm}-{targetMaxKm} km
         </span>
@@ -79,14 +81,16 @@ export function WeekBars({
               onFocus={() => setActive(index)}
               onBlur={() => setActive(null)}
             >
-              <span className="num min-h-4 text-[12px] text-ink">{day.km > 0 ? formatWeekKm(day.km) : ""}</span>
+              <span className="num min-h-4 text-micro text-ink">{day.km > 0 ? formatWeekKm(day.km) : ""}</span>
               <span className="flex h-24 w-full items-end justify-center">
                 <span
                   className="irun-bar block w-full max-w-8 origin-bottom rounded-t-[10px]"
                   style={{
                     height: day.km > 0 ? `${height}%` : "2px",
-                    background: day.km > 0 ? (today ? "var(--accent)" : "var(--accent-text)") : "var(--border)",
-                    opacity: today || day.km <= 0 ? 1 : 0.55,
+                    background: day.km > 0 ? (today ? "var(--accent-2)" : "var(--accent-text)") : "var(--border)",
+                    boxShadow: today && day.km > 0 ? "inset 0 0 0 1px var(--on-accent-2)" : undefined,
+                    filter: today && day.km > 0 ? "drop-shadow(0 0 var(--glow-size) var(--glow-peach))" : undefined,
+                    opacity: today || day.km <= 0 ? 1 : 0.75,
                     transformBox: "fill-box",
                     transformOrigin: "center bottom",
                     animation: day.km > 0 ? "irun-bar-grow 200ms cubic-bezier(0.23, 1, 0.32, 1) both" : undefined,
@@ -95,8 +99,13 @@ export function WeekBars({
                 />
               </span>
               <span
-                className="font-mono text-[12px]"
-                style={{ color: today ? "var(--accent)" : "var(--text-muted)" }}
+                data-today-marker={today ? "" : undefined}
+                className={cn(
+                  "inline-flex h-5 items-center rounded-full px-2 font-mono text-micro",
+                  today
+                    ? "bg-accent-2 font-semibold text-on-accent-2 shadow-[0_0_var(--glow-size)_var(--glow-peach)]"
+                    : "text-ink-muted",
+                )}
               >
                 {weekdayLabel(day.date)}
               </span>

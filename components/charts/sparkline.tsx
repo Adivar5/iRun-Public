@@ -61,7 +61,7 @@ export function Sparkline({
             strokeDasharray="1 1"
           />
         </svg>
-        <span className="num text-[12px] text-ink">{formatValue(lastValue)}</span>
+        <span className="num text-micro text-ink">{formatValue(lastValue)}</span>
       </div>
       <ChartTableSheet
         title={label}

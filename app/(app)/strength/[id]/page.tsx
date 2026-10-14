@@ -1,7 +1,7 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { LegDayToggle } from "@/components/strength/leg-day-toggle";
+import { BackLink } from "@/components/ui/back-link";
 import { getStrengthSession } from "@/lib/data/strength";
 import { formatDuration, formatLocalDay } from "@/lib/format";
 import { supabaseServer } from "@/lib/supabase/server";
@@ -16,13 +16,11 @@ export default async function StrengthSessionPage({ params }: { params: Promise<
   if (session.energyKcal != null) facts.push(`${Math.round(session.energyKcal)} kcal`);
 
   return (
-    <div className="flex flex-col gap-4">
-      <Link href="/strength" className="inline-flex min-h-11 items-center text-base text-accent-ink">
-        All sessions
-      </Link>
+    <div className="flex flex-col gap-3">
+      <BackLink href="/strength">All sessions</BackLink>
       <header className="flex flex-col gap-1">
-        <h1 className="text-base font-medium text-ink">{session.name}</h1>
-        <p className="text-sm text-ink-muted">{facts.join(" · ")}</p>
+        <h1 className="font-display text-screen font-semibold text-ink">{session.name}</h1>
+        <p className="text-label text-ink-muted">{facts.join(" · ")}</p>
       </header>
       <LegDayToggle workoutId={session.id} legDay={session.legDay} />
     </div>

@@ -7,21 +7,20 @@ import { useEffect, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/cn";
-import { Icon, type IconName } from "./icon";
 import { press } from "./press";
 import { getTabPending, setTabPending, subscribeTabPending } from "./tab-stage";
 
 const PILL = { type: "spring" as const, stiffness: 300, damping: 28 };
 
-const TABS: { key: "today" | "runs" | "trends" | "insights" | "strength"; href: string; label: string; icon: IconName }[] = [
-  { key: "today", href: "/today", label: "Today", icon: "sun" },
-  { key: "runs", href: "/runs", label: "Runs", icon: "runner" },
-  { key: "trends", href: "/trends", label: "Trends", icon: "pulse" },
-  { key: "insights", href: "/insights", label: "Insights", icon: "notebook" },
-  { key: "strength", href: "/strength", label: "Strength", icon: "plates" },
+const TABS: { key: "today" | "runs" | "trends" | "insights" | "strength"; href: string; label: string }[] = [
+  { key: "today", href: "/today", label: "Today" },
+  { key: "runs", href: "/runs", label: "Runs" },
+  { key: "trends", href: "/trends", label: "Trends" },
+  { key: "insights", href: "/insights", label: "Insights" },
+  { key: "strength", href: "/strength", label: "Strength" },
 ];
 
-const pillClass = "absolute inset-x-1 top-1.5 bottom-1.5 rounded-full bg-accent";
+const pillClass = "absolute inset-x-1 top-1.5 bottom-1.5 rounded-full bg-accent shadow-[0_0_var(--glow-size)_var(--glow-accent)]";
 
 export function TabBar({ active }: { active: (typeof TABS)[number]["key"] }) {
   const reduce = useReducedMotion();
@@ -37,12 +36,10 @@ export function TabBar({ active }: { active: (typeof TABS)[number]["key"] }) {
     () => false,
   );
   return (
-    <nav
-      aria-label="Main"
-      className="fixed inset-x-3 bottom-0 z-40 pb-[env(safe-area-inset-bottom)]"
-    >
-      <ul className="mx-auto mb-3 grid h-16 max-w-[430px] grid-cols-5 rounded-[24px] border border-line bg-surface-1">
-        {TABS.map(({ key, href, label, icon }) => {
+    <nav aria-label="Main" className="fixed inset-x-0 bottom-0 z-40 pb-[env(safe-area-inset-bottom)]">
+      <div className="mx-auto max-w-shell px-4">
+        <ul className="mb-3 grid h-16 grid-cols-5 rounded-full border border-line bg-surface-1">
+        {TABS.map(({ key, href, label }) => {
           const on = key === shown;
           return (
             <li key={key} className="relative">
@@ -62,22 +59,25 @@ export function TabBar({ active }: { active: (typeof TABS)[number]["key"] }) {
                 href={href}
                 prefetch={true}
                 aria-current={key === active ? "page" : undefined}
-                onClick={() => {
-                  if (key !== active) setTabPending(key);
+                onClick={(event) => {
+                  // Modified clicks open elsewhere and never navigate this page, so they must not swap in a skeleton.
+                  if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return;
+                  // Tapping back to the current tab cancels a navigation that has not landed yet.
+                  setTabPending(key === active ? null : key);
                 }}
                 className={cn(
-                  "relative z-10 flex h-full min-h-11 min-w-11 flex-col items-center justify-center gap-1 font-body text-[12px] font-medium",
+                  "relative z-10 flex h-full min-h-11 min-w-11 items-center justify-center font-body text-label font-medium",
                   press,
                   on ? "text-on-accent" : "text-ink-muted",
                 )}
               >
-                <Icon name={icon} className="size-6" />
                 {label}
               </Link>
             </li>
           );
         })}
-      </ul>
+        </ul>
+      </div>
     </nav>
   );
 }

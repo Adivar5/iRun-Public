@@ -40,7 +40,7 @@ export function LoopCard({
   return (
     <article aria-label={summary} className={`flex w-full max-w-full flex-col gap-2 rounded-card border border-line bg-surface-1 p-4 ${press}`}>
       <h2 className="font-body text-base font-semibold text-ink">{loop.name}</h2>
-      <p className="font-mono text-[12px] text-ink-muted">{formatKm(loop.distanceM)} km loop</p>
+      <p className="font-mono text-micro text-ink-muted">{formatKm(loop.distanceM)} km loop</p>
       <p className="flex items-center gap-1.5 text-base text-ink">
         <Icon name="repeat" />
         {attemptsLabel}

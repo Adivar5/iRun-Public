@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import JSZip from "jszip";
 import { Card } from "@/components/ui/card";
 import { ErrorBanner } from "@/components/ui/error-banner";
+import { Section } from "@/components/ui/section";
 import { exportAll } from "@/lib/data/export";
 import {
   deleteStravaApiWorkouts,
@@ -15,6 +16,7 @@ import {
 } from "@/lib/data/settings";
 import type { ProfileValues } from "@/app/(app)/settings/schema";
 import { supabaseBrowser } from "@/lib/supabase/client";
+import { AppearanceSection } from "./appearance-section";
 import { ImportArchive } from "./import-archive";
 import { ProfileForm } from "./profile-form";
 import { SecuritySection } from "./security-section";
@@ -65,16 +67,15 @@ export function SettingsScreen({
   }
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-6">
       {message ? <ErrorBanner message={message} /> : null}
-      <section className="flex flex-col gap-3">
-        <h2 className="font-display text-[20px] font-semibold text-ink">Heart rate and the 5k</h2>
-        <p className="text-base text-ink-muted">Max heart rate sets the zones. The 5k pace is the number Today chases.</p>
+      <AppearanceSection />
+      <Section id="profile" title="Heart rate and the 5k">
+        <p className="text-body text-ink-muted">Max heart rate sets the zones. The 5k pace is the number Today chases.</p>
         <ProfileForm initial={profile} saved={profileSaved} save={saveProfile} />
-      </section>
-      <section className="flex flex-col gap-3">
-        <h2 className="font-display text-[20px] font-semibold text-ink">Strava</h2>
-        <p className="text-base text-ink-muted">Connect once. New runs land on Today after the next sync.</p>
+      </Section>
+      <Section id="strava" title="Strava">
+        <p className="text-body text-ink-muted">Connect once. New runs land on Today after the next sync.</p>
         <StravaSection
           connection={connection}
           logs={logs}
@@ -96,16 +97,14 @@ export function SettingsScreen({
             await deleteStravaApiWorkouts(supabaseBrowser(), userId);
           }}
         />
-      </section>
-      <section className="flex flex-col gap-3">
-        <h2 className="font-display text-[20px] font-semibold text-ink">Archive</h2>
-        <p className="text-base text-ink-muted">A Strava export zip stays on this phone. FIT files are listed and skipped.</p>
+      </Section>
+      <Section id="archive" title="Archive">
+        <p className="text-body text-ink-muted">A Strava export zip stays on this phone. FIT files are listed and skipped.</p>
         <Card>
           <ImportArchive initialProgress={archiveProgress} initialSkipped={archiveSkipped} />
         </Card>
-      </section>
-      <section className="flex flex-col gap-3">
-        <h2 className="font-display text-[20px] font-semibold text-ink">Security</h2>
+      </Section>
+      <Section id="security" title="Security">
         <SecuritySection
           totpEnrolled={totpEnrolled}
           busy={pending}
@@ -146,7 +145,7 @@ export function SettingsScreen({
             });
           }}
         />
-      </section>
+      </Section>
     </div>
   );
 }

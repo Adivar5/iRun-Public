@@ -1,5 +1,6 @@
 {
   "imports": {
     "zod": "npm:zod@4"
-  }
+  },
+  "test": { "include": ["**/*.deno.test.ts"] }
 }

@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/card";
 import { ConfidenceDots } from "@/components/ui/confidence-dots";
 import { DeltaChip } from "@/components/ui/delta-chip";
 import { Icon, type IconName } from "@/components/ui/icon";
+import { STATUS_ICON, STATUS_TEXT } from "@/components/ui/status-chip";
 import { SourceFootnote } from "@/components/ui/source-footnote";
 import type { InsightCardT } from "@/supabase/functions/_shared/insights/schema";
 
@@ -47,21 +48,6 @@ function goodOf(status: InsightCardT["status"]): boolean | null {
       return false;
     case "watch":
       return null;
-    default: {
-      const unexpected: never = status;
-      return unexpected;
-    }
-  }
-}
-
-function edgeClass(status: InsightCardT["status"]): string {
-  switch (status) {
-    case "good":
-      return "border-l-4 border-good";
-    case "watch":
-      return "border-l-4 border-watch";
-    case "alert":
-      return "border-l-4 border-alert";
     default: {
       const unexpected: never = status;
       return unexpected;
@@ -132,31 +118,31 @@ function MiniChart({ card }: { card: InsightCardT }) {
   }
 }
 
+const STATUS_WORD = { good: "Good", watch: "Watch", alert: "Alert" } as const;
+
 export function InsightCard({ card, at }: { card: InsightCardT; at: string }) {
   const headingId = `insight-${card.id}`;
   return (
     <article aria-labelledby={headingId} data-status={card.status} tabIndex={-1} className="outline-none focus-visible:ring-2 focus-visible:ring-accent">
-      <Card className={edgeClass(card.status)}>
+      <Card>
         <div className="flex flex-col gap-3">
           <div className="flex items-center justify-between gap-2">
-            <span className="inline-flex items-center gap-1.5 font-mono text-[12px] text-ink-muted">
+            <span className="inline-flex items-center gap-1.5 font-mono text-micro text-ink-muted">
               <Icon name={typeIcon(card.type)} className="size-4" />
               {typeLabel(card.type)}
             </span>
-            {card.status === "alert" ? (
-              <span className="inline-flex items-center gap-1 text-[13px] text-alert">
-                <Icon name="alert-triangle" className="size-4" />
-                Alert
-              </span>
-            ) : null}
+            <span className={`inline-flex items-center gap-1 text-label ${STATUS_TEXT[card.status]}`}>
+              <Icon name={STATUS_ICON[card.status]} className="size-4" />
+              {STATUS_WORD[card.status]}
+            </span>
           </div>
-          <h2 id={headingId} className="text-base font-medium text-ink">
+          <h2 id={headingId} className="text-body font-semibold text-ink">
             {card.title}
           </h2>
           <div className="flex items-end justify-between gap-3">
             <p className="flex items-baseline gap-2">
-              <span className="num text-[28px] leading-none text-ink">{formatAmount(card.value)}</span>
-              <span className="text-[13px] text-ink-muted">{card.unit}</span>
+              <span className="num text-stat leading-none text-ink">{formatAmount(card.value)}</span>
+              <span className="text-label text-ink-muted">{card.unit}</span>
             </p>
             <DeltaChip value={formatAmount(Math.abs(card.delta))} unit={card.unit} direction={card.direction} good={goodOf(card.status)} />
           </div>

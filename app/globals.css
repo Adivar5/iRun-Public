@@ -1,37 +1,54 @@
 @import "tailwindcss";
 
 :root {
-  /* Headlamp: warm night ground, paper type, one lime signal. Not violet, not slate, not Strava orange. */
-  --bg: #10140C; --surface-1: #171C12; --surface-2: #222818; --border: #3A4230;
-  --text: #F4F1E4; --text-muted: #B7B29F;
-  --accent: #D6F25C; --accent-text: #D6F25C; --on-accent: #14160C;
-  --good: #8EDEAE; --watch: #E6C15A; --alert: #FF6B6B;
-  --z1: #64748B; --z2: #38BDF8; --z3: #34D399; --z4: #FBBF24; --z5: #FF5C6C;
-  /* Slow olive clears 3:1 on --bg and --surface-2. Brighter still means faster. */
-  --pace-0: #7C8648; --pace-1: #A8C44A; --pace-2: #D6F25C; --pace-3: #F4F1E4;
-  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
-  color-scheme: dark;
-}
-:root[data-theme="light"] {
-  --bg: #F3F0E4; --surface-1: #FFFCF3; --surface-2: #FFFCF3; --border: #D9D3C2;
+  /* Daylight paper: light is the default. Teal is the signal, one peach is the highlight. */
+  --bg: #F3F0E4; --surface-1: #FFFCF3; --surface-2: #FFFFFF; --border: #D9D3C2;
   --text: #16180F; --text-muted: #5C584C;
-  --accent: #3E5600; --accent-text: #3E5600; --on-accent: #F3F0E4;
+  --accent: #0B6F78; --accent-text: #0B6F78; --on-accent: #FFFFFF;
+  --accent-2: #FFB488; --on-accent-2: #3A1A0A;
   --good: #047857; --watch: #8A5A00; --alert: #C42332;
-  /* Dark-theme lime and paper vanish on cream (1.22:1 and 1.10:1). Slow stays lighter than fast. All clear 3:1 on #FFFCF3. */
-  --pace-0: #6B5E3A; --pace-1: #4E5C18; --pace-2: #3E5600; --pace-3: #1A2608;
-  /* The dark-theme zone hues sit under 3:1 on cream, except the slate. These are the same hues, darkened. */
   --z1: #3E4C5E; --z2: #075985; --z3: #047857; --z4: #92400E; --z5: #9F1239;
+  /* Pace ramp: lighter is slower, darker is faster, in light. All clear 3:1 on white. */
+  --pace-0: #66918C; --pace-1: #2F8A86; --pace-2: #0B6F78; --pace-3: #0A3A40;
+  /* No glow in light. */
+  --glow-size: 0px; --glow-accent: transparent; --glow-peach: transparent;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  /* Shell geometry. Chrome-top = 48px bar + 2px accent rule. Chrome-bottom = 64px dock + 12px gap. */
+  --gutter: 16px; --chrome-top: 50px; --chrome-bottom: 76px;
   color-scheme: light;
+}
+:root[data-theme="dark"] {
+  /* Deep teal-black. Brighter teal and the same peach, with a soft glow on a short list of elements. */
+  --bg: #081412; --surface-1: #0E1C1A; --surface-2: #142624; --border: #24403C;
+  --text: #EAF6F3; --text-muted: #9DB8B3;
+  --accent: #3FD9C8; --accent-text: #3FD9C8; --on-accent: #04201C;
+  --accent-2: #FFB488; --on-accent-2: #3A1A0A;
+  --good: #7FE0B0; --watch: #E6C15A; --alert: #FF6B6B;
+  --z1: #64748B; --z2: #38BDF8; --z3: #34D399; --z4: #FBBF24; --z5: #FF5C6C;
+  /* Brighter is faster, in dark. */
+  --pace-0: #4E8F88; --pace-1: #3FB5A8; --pace-2: #3FD9C8; --pace-3: #EAF6F3;
+  --glow-size: 14px; --glow-accent: rgb(63 217 200 / 0.35); --glow-peach: rgb(255 180 136 / 0.32);
+  color-scheme: dark;
 }
 
 @theme inline {
   --color-bg: var(--bg); --color-surface-1: var(--surface-1); --color-surface-2: var(--surface-2);
   --color-line: var(--border); --color-ink: var(--text); --color-ink-muted: var(--text-muted);
   --color-accent: var(--accent); --color-accent-ink: var(--accent-text); --color-on-accent: var(--on-accent);
+  --color-accent-2: var(--accent-2); --color-on-accent-2: var(--on-accent-2);
   --color-good: var(--good); --color-watch: var(--watch); --color-alert: var(--alert);
-  --font-display: var(--font-display-face), sans-serif;
-  --font-body: var(--font-body-face), sans-serif;
-  --font-mono: var(--font-mono-face), ui-monospace, monospace;
+  --font-display: var(--font-body-face), system-ui, sans-serif;
+  --font-body: var(--font-body-face), system-ui, sans-serif;
+  --font-mono: var(--font-body-face), system-ui, sans-serif;
+  --font-hero: var(--font-hero-face), sans-serif;
+  --text-hero: 56px;   --text-hero--line-height: 1;
+  --text-screen: 32px; --text-screen--line-height: 1.15;
+  --text-stat: 28px;   --text-stat--line-height: 1.1;
+  --text-title: 20px;  --text-title--line-height: 1.25;
+  --text-body: 16px;   --text-body--line-height: 1.5;
+  --text-label: 13px;  --text-label--line-height: 1.4;
+  --text-micro: 12px;  --text-micro--line-height: 1.4;
+  --container-shell: 430px;
   --radius-card: 20px; --radius-btn: 14px; --radius-sheet: 28px;
 }
 
@@ -44,10 +61,12 @@ html {
 html::-webkit-scrollbar { display: none; }
 body {
   min-height: 100dvh; font-size: 1rem; line-height: 1.5;
-  /* spec 2.5 backdrop: 1 px dot grid at 4 percent, as an SVG tile (no gradients) */
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16'%3E%3Ccircle cx='1' cy='1' r='1' fill='%23F4F1E4' fill-opacity='0.05'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16'%3E%3Ccircle cx='1' cy='1' r='1' fill='%2316180F' fill-opacity='0.05'/%3E%3C/svg%3E");
 }
-.num { font-family: var(--font-display); font-variant-numeric: tabular-nums; }
+:root[data-theme="dark"] body {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16'%3E%3Ccircle cx='1' cy='1' r='1' fill='%23EAF6F3' fill-opacity='0.05'/%3E%3C/svg%3E");
+}
+.num { font-family: var(--font-display); font-weight: 700; font-variant-numeric: tabular-nums; font-feature-settings: "tnum"; }
 h1, h2, h3 { text-wrap: balance; }
 p { text-wrap: pretty; }
 :focus-visible { outline: 2px solid var(--accent-text); outline-offset: 2px; }

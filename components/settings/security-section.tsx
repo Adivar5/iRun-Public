@@ -30,13 +30,13 @@ export function SecuritySection({
           <Button variant="secondary" className="w-full" onClick={onSignOutOthers} disabled={busy}>
             Sign out other sessions
           </Button>
-          <p className="text-[13px] text-ink-muted">This phone stays signed in.</p>
+          <p className="text-label text-ink-muted">This phone stays signed in.</p>
         </div>
         <div className="flex flex-col gap-3">
           <Button variant="secondary" className="w-full" onClick={onExport} disabled={busy}>
             Export all my data
           </Button>
-          <p className="text-[13px] text-ink-muted">A JSON file and a zip of CSV tables. Only your rows.</p>
+          <p className="text-label text-ink-muted">A JSON file and a zip of CSV tables. Only your rows.</p>
         </div>
         <div className="flex flex-col gap-3 border-t border-line pt-5">
           <p className="text-base text-ink">
@@ -44,7 +44,7 @@ export function SecuritySection({
             can connect Strava again. Strava may still keep its own copy.
           </p>
           <div className="flex flex-col gap-1">
-            <label htmlFor="delete-confirm" className="text-[13px] text-ink-muted">
+            <label htmlFor="delete-confirm" className="text-label text-ink-muted">
               Type DELETE to confirm
             </label>
             <input

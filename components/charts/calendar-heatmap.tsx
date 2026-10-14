@@ -1,6 +1,7 @@
 "use client";
 
 import { Icon } from "@/components/ui/icon";
+import { cn } from "@/lib/cn";
 
 type Day = { date: string; runKm: number; strength: boolean; legDay: boolean };
 
@@ -65,9 +66,11 @@ function plural(count: number, one: string, many: string): string {
 export function CalendarHeatmap({
   days,
   daysSinceLegDay,
+  today,
 }: {
   days: Day[];
   daysSinceLegDay: number | null;
+  today?: string;
 }) {
   if (days.length === 0) {
     return (
@@ -88,7 +91,7 @@ export function CalendarHeatmap({
 
   return (
     <div className="flex w-full max-w-full flex-col gap-3">
-      <p className="inline-flex items-center gap-1.5 font-mono text-[12px] text-ink">
+      <p className="inline-flex items-center gap-1.5 font-mono text-micro text-ink">
         <Icon name={daysSinceLegDay == null ? "alert-triangle" : "clock"} />
         {badge}
       </p>
@@ -96,7 +99,7 @@ export function CalendarHeatmap({
         <thead>
           <tr>
             {HEADERS.map((label) => (
-              <th key={label} scope="col" className="h-6 font-mono text-[12px] font-normal text-ink-muted">
+              <th key={label} scope="col" className="h-6 font-mono text-micro font-normal text-ink-muted">
                 {label}
               </th>
             ))}
@@ -110,7 +113,11 @@ export function CalendarHeatmap({
                   <td
                     key={day.date}
                     aria-label={cellName(day)}
-                    className="h-11 w-11 border border-line p-0 text-center align-middle text-ink"
+                    data-today={day.date === today ? "true" : undefined}
+                    className={cn(
+                      "h-11 border p-0 align-middle text-ink",
+                      day.date === today ? "border-on-accent-2 ring-2 ring-inset ring-accent-2" : "border-line",
+                    )}
                     style={{
                       background:
                         day.runKm > 0
@@ -118,21 +125,21 @@ export function CalendarHeatmap({
                           : "var(--surface-1)",
                     }}
                   >
-                    <span className="flex h-11 w-11 flex-col items-center justify-center gap-0.5">
-                      {day.runKm > 0 ? <span className="num text-[12px] leading-none">{kmText(day.runKm)}</span> : null}
-                      {day.legDay ? <span className="font-mono text-[12px] leading-none">L</span> : null}
+                    <span className="flex h-full w-full flex-col items-center justify-center gap-0.5">
+                      {day.runKm > 0 ? <span className="num text-micro leading-none">{kmText(day.runKm)}</span> : null}
+                      {day.legDay ? <span className="font-mono text-micro leading-none">L</span> : null}
                       {day.strength ? (
                         <span data-symbol="strength" className="inline-flex">
                           <Icon name="dumbbell" className="size-3.5" />
                         </span>
                       ) : null}
                       {day.runKm <= 0 && !day.legDay && !day.strength ? (
-                        <span className="font-mono text-[12px] text-ink-muted">–</span>
+                        <span className="font-mono text-micro text-ink-muted">–</span>
                       ) : null}
                     </span>
                   </td>
                 ) : (
-                  <td key={`empty-${weekIndex}-${dayIndex}`} className="h-11 w-11 p-0" />
+                  <td key={`empty-${weekIndex}-${dayIndex}`} className="h-11 p-0" />
                 ),
               )}
             </tr>

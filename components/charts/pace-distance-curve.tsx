@@ -82,12 +82,12 @@ export function PaceDistanceCurve({
           {dots.length > 0 ? <Scatter data={dots} dataKey="pace" fill="var(--text)" /> : null}
         </ComposedChart>
       </div>
-      <p className="mt-2 font-mono text-[12px] text-ink">
+      <p className="mt-2 font-mono text-micro text-ink">
         {formatPace(first.paceS)} /km at {distanceLabel(first.distanceM)} to {formatPace(last.paceS)} /km at{" "}
         {distanceLabel(last.distanceM)}
       </p>
       {loops.length > 0 ? (
-        <ul className="mt-1 font-mono text-[12px] text-ink">
+        <ul className="mt-1 font-mono text-micro text-ink">
           {loops.map((loop) => (
             <li key={loop.name}>
               {loop.name}, {formatPace(loop.paceS)} /km at {distanceLabel(loop.distanceM)}

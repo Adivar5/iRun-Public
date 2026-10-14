@@ -1,25 +1,17 @@
-import { Anybody, IBM_Plex_Mono, Sora } from "next/font/google";
+import { Anybody, Geist } from "next/font/google";
 
-// Big Shoulders Display is not in this Next.js font list. Anybody is: condensed-capable,
-// italic, and not the Exo 2 / DM Sans pair the shell was using.
-export const display = Anybody({
+// Geist carries every sentence, label, and number. Anybody italic is only the big distance number on Today.
+export const body = Geist({
   subsets: ["latin"],
-  weight: ["600", "700", "800"],
-  style: ["normal", "italic"],
-  variable: "--font-display-face",
-  display: "swap",
-});
-
-export const body = Sora({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
+  weight: ["400", "500", "600", "700"],
   variable: "--font-body-face",
   display: "swap",
 });
 
-export const mono = IBM_Plex_Mono({
+export const hero = Anybody({
   subsets: ["latin"],
-  weight: ["400", "500"],
-  variable: "--font-mono-face",
+  weight: ["700"],
+  style: ["italic"],
+  variable: "--font-hero-face",
   display: "swap",
 });
